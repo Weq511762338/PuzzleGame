@@ -2,16 +2,26 @@ package UI;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class GameJFrame extends JFrame implements KeyListener {
+public class GameJFrame extends JFrame implements KeyListener, ActionListener {
 
     private int[][] data = new int[4][4];
     private int blankX, blankY;
     private String path = "image/animal/animal3/";
+
+    private int step = 0;
+
+    JMenuItem replayItem = new JMenuItem("Replay");
+    JMenuItem reLoginItem = new JMenuItem("Login Again");
+    JMenuItem closeItem = new JMenuItem("Quit");
+
+    JMenuItem accountItem = new JMenuItem("Public Account");
 
     public GameJFrame(){
         initJFrame();
@@ -50,6 +60,10 @@ public class GameJFrame extends JFrame implements KeyListener {
             this.getContentPane().add(winLabel);
         }
 
+        JLabel stepCount = new JLabel("step: " + step);
+        stepCount.setBounds(50, 30, 100, 20);
+        this.getContentPane().add(stepCount);
+
         for (int x = 0; x < 4; x++) {
             for (int y = 0; y < 4; y++) {
                 ImageIcon icon = new ImageIcon(path + data[x][y]+".jpg");
@@ -73,11 +87,11 @@ public class GameJFrame extends JFrame implements KeyListener {
         JMenu functionJMenu = new JMenu("Menu");
         JMenu aboutJMenu = new JMenu("About Us");
 
-        JMenuItem replayItem = new JMenuItem("Replay");
-        JMenuItem reLoginItem = new JMenuItem("Login Again");
-        JMenuItem closeItem = new JMenuItem("Quit");
+        replayItem.addActionListener(this);
+        reLoginItem.addActionListener(this);
+        closeItem.addActionListener(this);
 
-        JMenuItem accountItem = new JMenuItem("Public Account");
+        accountItem.addActionListener(this);
 
         functionJMenu.add(replayItem);
         functionJMenu.add(reLoginItem);
@@ -138,6 +152,7 @@ public class GameJFrame extends JFrame implements KeyListener {
         }
         // arrow keys game play
         else{
+            step++;
             code -= 37;
             if(code < 0 || code > 3)
                 return;
@@ -175,5 +190,32 @@ public class GameJFrame extends JFrame implements KeyListener {
             }
         }
         return true;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Object obj = e.getSource();
+
+        if(obj == replayItem){
+            initData();
+            step = 0;
+            initImage();
+        }else if(obj == closeItem){
+            System.exit(0);
+        }else if(obj == reLoginItem){
+            this.setVisible(false);
+            new LoginJFrame();
+        }else if(obj == accountItem){
+            JDialog dialog = new JDialog();
+            JLabel label = new JLabel(new ImageIcon("image/about.jpg"));
+            label.setBounds(0, 0, 258, 258);
+            dialog.getContentPane().add(label);
+
+            dialog.setSize(344, 344);
+            dialog.setAlwaysOnTop(true);
+            dialog.setLocationRelativeTo(null);
+            dialog.setModal(true);
+            dialog.setVisible(true);
+        }
     }
 }

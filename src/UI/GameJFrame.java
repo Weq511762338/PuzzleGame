@@ -44,6 +44,12 @@ public class GameJFrame extends JFrame implements KeyListener {
     private void initImage() {
         this.getContentPane().removeAll();
 
+        if(victory()){
+            JLabel winLabel = new JLabel(new ImageIcon("image/win.png"));
+            winLabel.setBounds(203, 283, 197, 73);
+            this.getContentPane().add(winLabel);
+        }
+
         for (int x = 0; x < 4; x++) {
             for (int y = 0; y < 4; y++) {
                 ImageIcon icon = new ImageIcon(path + data[x][y]+".jpg");
@@ -103,6 +109,9 @@ public class GameJFrame extends JFrame implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        if(victory())
+            return ;
+
         int code = e.getKeyCode();
 
         // when "a" is pressed
@@ -156,5 +165,15 @@ public class GameJFrame extends JFrame implements KeyListener {
         // when key "a" is released
         if(code == 65)
             initImage();
+    }
+
+    public boolean victory(){
+        for(int i = 0; i < 4; i++){
+            for(int j = 0; j < 4; j++) {
+                if (data[i][j] != i * 4 + j + 1)
+                    return false;
+            }
+        }
+        return true;
     }
 }

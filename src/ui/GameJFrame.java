@@ -6,8 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 public class GameJFrame extends JFrame implements KeyListener, ActionListener {
 
@@ -16,6 +18,10 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
     private String path = "image/animal/animal3/";
 
     private int step = 0;
+
+    JMenuItem girlItem = new JMenuItem("Girls");
+    JMenuItem animalItem = new JMenuItem("Animals");
+    JMenuItem sportItem = new JMenuItem("Sports");
 
     JMenuItem replayItem = new JMenuItem("Replay");
     JMenuItem reLoginItem = new JMenuItem("Login Again");
@@ -86,6 +92,11 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
 
         JMenu functionJMenu = new JMenu("Menu");
         JMenu aboutJMenu = new JMenu("About Us");
+        JMenu replaceImageMenu = new JMenu("Replace Image");
+
+        girlItem.addActionListener(this);
+        animalItem.addActionListener(this);
+        sportItem.addActionListener(this);
 
         replayItem.addActionListener(this);
         reLoginItem.addActionListener(this);
@@ -93,6 +104,11 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
 
         accountItem.addActionListener(this);
 
+        replaceImageMenu.add(girlItem);
+        replaceImageMenu.add(animalItem);
+        replaceImageMenu.add(sportItem);
+
+        functionJMenu.add(replaceImageMenu);
         functionJMenu.add(replayItem);
         functionJMenu.add(reLoginItem);
         functionJMenu.add(closeItem);
@@ -216,6 +232,22 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
             dialog.setLocationRelativeTo(null);
             dialog.setModal(true);
             dialog.setVisible(true);
+        }else if(obj == girlItem){
+            randomImage("girl");
+        }else if(obj == animalItem){
+            randomImage("animal");
+        }else if(obj == sportItem){
+            randomImage("sport");
         }
+    }
+
+    private void randomImage(String category){
+        File dir = new File("image/" + category);
+        int total = dir.list().length;
+        int index = new Random().nextInt(total)+1;
+        path = "image/" + category + "/" + category + index + "/";
+        step = 0;
+        initData();
+        initImage();
     }
 }

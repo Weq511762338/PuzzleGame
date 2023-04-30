@@ -129,6 +129,9 @@ public class LoginJFrame extends JFrame implements MouseListener {
         }else if (e.getSource() == rightCode) {
             String code = CodeUtil.getCode();
             rightCode.setText(code);
+        }else if(e.getSource() == register){
+            this.setVisible(false);
+            new RegisterJFrame(allUsers);
         }
     }
 

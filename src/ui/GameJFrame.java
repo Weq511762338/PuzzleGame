@@ -11,6 +11,7 @@ import java.awt.event.KeyListener;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Properties;
 import java.util.Random;
 
 public class GameJFrame extends JFrame implements KeyListener, ActionListener {
@@ -293,7 +294,18 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
             new LoginJFrame();
         }else if(obj == accountItem){
             JDialog dialog = new JDialog();
-            JLabel label = new JLabel(new ImageIcon("image/about.jpg"));
+
+            Properties prop = new Properties();
+            try {
+                FileInputStream fis = new FileInputStream("about.properties");
+                prop.load(fis);
+                fis.close();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+
+            JLabel label = new JLabel(new ImageIcon((String) prop.get("account")));
+
             label.setBounds(0, 0, 258, 258);
             dialog.getContentPane().add(label);
 

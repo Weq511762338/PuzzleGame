@@ -1,5 +1,7 @@
 package ui;
 
+import domain.GameInfo;
+
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.event.ActionEvent;
@@ -7,6 +9,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -28,6 +33,23 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
     JMenuItem closeItem = new JMenuItem("Quit");
 
     JMenuItem accountItem = new JMenuItem("Public Account");
+
+    JMenu saveJMenu = new JMenu("Save");
+    JMenu loadJMenu = new JMenu("Load Saves");
+
+    JMenuItem saveItem0 = new JMenuItem("Save0(empty)");
+    JMenuItem saveItem1 = new JMenuItem("Save1(empty)");
+    JMenuItem saveItem2 = new JMenuItem("Save2(empty)");
+    JMenuItem saveItem3 = new JMenuItem("Save3(empty)");
+    JMenuItem saveItem4 = new JMenuItem("Save4(empty)");
+
+    JMenuItem loadItem0 = new JMenuItem("Load Save0(empty)");
+    JMenuItem loadItem1 = new JMenuItem("Load Save1(empty)");
+    JMenuItem loadItem2 = new JMenuItem("Load Save2(empty)");
+    JMenuItem loadItem3 = new JMenuItem("Load Save3(empty)");
+    JMenuItem loadItem4 = new JMenuItem("Load Save4(empty)");
+
+
 
     public GameJFrame(){
         initJFrame();
@@ -94,6 +116,21 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
         JMenu aboutJMenu = new JMenu("About Us");
         JMenu replaceImageMenu = new JMenu("Replace Image");
 
+        saveJMenu.add(saveItem0);
+        saveJMenu.add(saveItem1);
+        saveJMenu.add(saveItem2);
+        saveJMenu.add(saveItem3);
+        saveJMenu.add(saveItem4);
+
+        loadJMenu.add(loadItem0);
+        loadJMenu.add(loadItem1);
+        loadJMenu.add(loadItem2);
+        loadJMenu.add(loadItem3);
+        loadJMenu.add(loadItem4);
+
+        functionJMenu.add(saveJMenu);
+        functionJMenu.add(loadJMenu);
+
         girlItem.addActionListener(this);
         animalItem.addActionListener(this);
         sportItem.addActionListener(this);
@@ -103,6 +140,17 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
         closeItem.addActionListener(this);
 
         accountItem.addActionListener(this);
+
+        saveItem0.addActionListener(this);
+        saveItem1.addActionListener(this);
+        saveItem2.addActionListener(this);
+        saveItem3.addActionListener(this);
+        saveItem4.addActionListener(this);
+        loadItem0.addActionListener(this);
+        loadItem1.addActionListener(this);
+        loadItem2.addActionListener(this);
+        loadItem3.addActionListener(this);
+        loadItem4.addActionListener(this);
 
         replaceImageMenu.add(girlItem);
         replaceImageMenu.add(animalItem);
@@ -238,6 +286,24 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
             randomImage("animal");
         }else if(obj == sportItem){
             randomImage("sport");
+        }else if(obj == saveItem0 || obj == saveItem1 || obj == saveItem2 || obj == saveItem3){
+            JMenuItem item = (JMenuItem) obj;
+            String str = item.getText();
+            int index = str.charAt(4) - '0';
+
+            try {
+                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("save\\save" + index + ".data"));
+                GameInfo gi = new GameInfo(data, blankX, blankY, path, step);
+                oos.writeObject(gi);
+                oos.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            item.setText("Save" + index + "(" + step + " Moves)");
+            loadJMenu.getItem(index).setText("Load Save" + index + "(" + step + " Moves)");
+
+        }else if(obj == loadItem0 || obj == loadItem1 || obj == loadItem2 || obj == loadItem3){
+
         }
     }
 

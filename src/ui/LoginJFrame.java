@@ -1,5 +1,6 @@
 package ui;
 
+import cn.hutool.core.io.FileUtil;
 import domain.User;
 import util.CodeUtil;
 
@@ -7,14 +8,12 @@ import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.List;
 
 public class LoginJFrame extends JFrame implements MouseListener {
 
-    static ArrayList<User> allUsers = new ArrayList<>();
-    static {
-        allUsers.add(new User("zhangsan","123"));
-        allUsers.add(new User("lisi","1234"));
-    }
+    ArrayList<User> allUsers = new ArrayList<>();
+
 
     JButton login = new JButton();
     JButton register = new JButton();
@@ -26,11 +25,24 @@ public class LoginJFrame extends JFrame implements MouseListener {
     JLabel rightCode = new JLabel();
 
     public LoginJFrame() {
+        readUserInfo();
+
         initJFrame();
 
         initView();
 
         this.setVisible(true);
+    }
+
+    private void readUserInfo() {
+        List<String> info = FileUtil.readUtf8Lines("../../../userinfo.txt");
+        for(String str : info){
+            String[] arr = str.split("&");
+            allUsers.add(new User(
+                    arr[0].split("=")[1],
+                    arr[1].split("=")[1]
+            ));
+        }
     }
 
     public void initView() {

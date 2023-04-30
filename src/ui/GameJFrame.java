@@ -40,11 +40,11 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
     JMenuItem saveItem3 = new JMenuItem("Save3(empty)");
     JMenuItem saveItem4 = new JMenuItem("Save4(empty)");
 
-    JMenuItem loadItem0 = new JMenuItem("Load Save0(empty)");
-    JMenuItem loadItem1 = new JMenuItem("Load Save1(empty)");
-    JMenuItem loadItem2 = new JMenuItem("Load Save2(empty)");
-    JMenuItem loadItem3 = new JMenuItem("Load Save3(empty)");
-    JMenuItem loadItem4 = new JMenuItem("Load Save4(empty)");
+    JMenuItem loadItem0 = new JMenuItem("Save0(empty)");
+    JMenuItem loadItem1 = new JMenuItem("Save1(empty)");
+    JMenuItem loadItem2 = new JMenuItem("Save2(empty)");
+    JMenuItem loadItem3 = new JMenuItem("Save3(empty)");
+    JMenuItem loadItem4 = new JMenuItem("Save4(empty)");
 
 
 
@@ -163,7 +163,32 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
         jMenuBar.add(functionJMenu);
         jMenuBar.add(aboutJMenu);
 
+        getGameInfo();
+
         this.setJMenuBar(jMenuBar);
+    }
+
+    public void getGameInfo(){
+        File file = new File("save");
+        File[] files = file.listFiles();
+        for(File f : files){
+            GameInfo gi = null;
+            try {
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
+                gi = (GameInfo) ois.readObject();
+                ois.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            int step = gi.getStep();
+
+            String name = f.getName();
+            int index = name.charAt(4) - '0';
+            saveJMenu.getItem(index).setText("save" + index + "(" + step + " Moves)");
+            loadJMenu.getItem(index).setText("save" + index + "(" + step + " Moves)");
+        }
     }
 
     private void initJFrame() {
@@ -302,7 +327,7 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
         }else if(obj == loadItem0 || obj == loadItem1 || obj == loadItem2 || obj == loadItem3){
             JMenuItem item = (JMenuItem) obj;
             String str = item.getText();
-            int index = str.charAt(9) - '0';
+            int index = str.charAt(4) - '0';
             GameInfo gi = null;
             try {
                 ObjectInputStream ois = new ObjectInputStream(new FileInputStream("save\\save" + index + ".data"));

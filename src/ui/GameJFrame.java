@@ -72,7 +72,7 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
 
         for (int x = 0; x < 4; x++) {
             for (int y = 0; y < 4; y++) {
-                ImageIcon icon = new ImageIcon(path + data[x][y]+".jpg");
+                ImageIcon icon = new ImageIcon(path + ((data[x][y] == 16) ? -1 : data[x][y]) +".jpg");
                 JLabel label = new JLabel(icon);
                 label.setBounds(105*y + 83, 105*x + 134, 105, 105);
                 label.setBorder(new BevelBorder(BevelBorder.LOWERED));

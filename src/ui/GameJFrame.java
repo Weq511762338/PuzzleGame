@@ -8,10 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -128,9 +125,6 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
         loadJMenu.add(loadItem3);
         loadJMenu.add(loadItem4);
 
-        functionJMenu.add(saveJMenu);
-        functionJMenu.add(loadJMenu);
-
         girlItem.addActionListener(this);
         animalItem.addActionListener(this);
         sportItem.addActionListener(this);
@@ -160,6 +154,9 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
         functionJMenu.add(replayItem);
         functionJMenu.add(reLoginItem);
         functionJMenu.add(closeItem);
+
+        functionJMenu.add(saveJMenu);
+        functionJMenu.add(loadJMenu);
 
         aboutJMenu.add(accountItem);
 
@@ -303,7 +300,27 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
             loadJMenu.getItem(index).setText("Load Save" + index + "(" + step + " Moves)");
 
         }else if(obj == loadItem0 || obj == loadItem1 || obj == loadItem2 || obj == loadItem3){
+            JMenuItem item = (JMenuItem) obj;
+            String str = item.getText();
+            int index = str.charAt(9) - '0';
+            GameInfo gi = null;
+            try {
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream("save\\save" + index + ".data"));
+                gi = (GameInfo) ois.readObject();
+                ois.close();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
 
+            data = gi.getData();
+            path = gi.getPath();
+            blankX = gi.getX();
+            blankY = gi.getY();
+            step = gi.getStep();
+
+            initImage();
         }
     }
 

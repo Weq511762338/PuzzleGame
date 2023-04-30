@@ -26,7 +26,23 @@ public class GameInfo implements Serializable {
         this.step = step;
     }
 
+    public int[][] getData() {
+        return data;
+    }
 
+    public int getX() {
+        return x;
+    }
 
+    public int getY() {
+        return y;
+    }
 
+    public String getPath() {
+        return path;
+    }
+
+    public int getStep() {
+        return step;
+    }
 }
